@@ -6,3 +6,14 @@
 
 # R data files from past sessions
 .Rdata
+
+# R studio files
+.Rproj*/**
+*.Rproj
+
+# Data files
+activity.zip
+data/*
+
+# Markdown previews.
+*.html
