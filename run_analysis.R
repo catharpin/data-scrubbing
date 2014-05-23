@@ -1,3 +1,4 @@
+library(reshape2)
 
 ## Retrieve the dataset from cloudfront if it's not already present.
 
@@ -10,7 +11,7 @@ if (!file.exists("./activity.zip")){
 if (!file.exists("./data/UCI HAR Dataset")){
     unzip("activity.zip",exdir="./data")
 } else {
-    message ("Raw data already extracted.")
+    message ("Data directory present - assuming already unpacked.")
 }
 
 ## Create dataframes from the raw data files.
@@ -32,6 +33,7 @@ features <- features$feature
 
 ## The features vector will be added as column names to the raw data frame.
 
+message("Loading training data.")
 
 traindata <- read.table("data/UCI HAR Dataset/train/X_train.txt",
                         stringsAsFactors=FALSE,
@@ -54,6 +56,8 @@ traindata$sourcefile <- 'TRAIN'
 
 ## Now repeat the process for the test data.
 
+message("Loading test data.")
+
 testdata <- read.table("data/UCI HAR Dataset/test/X_test.txt",
                         stringsAsFactors=FALSE,
                         col.names=features)
@@ -74,7 +78,9 @@ testdata$sourcefile <- 'TEST'
 
 ## Objective 1. Merge training and test data into a single dataset.
 
-alldata <- merge(testdata,traindata,all=TRUE)
+combineddata <- merge(testdata,traindata,all=TRUE)
+
+combineddata <- combineddata[order(combineddata$subject,combineddata$activity),]
 
 rm("testdata","testdata.activity","testdata.subject","traindata",
    "traindata.activity","traindata.subject")
@@ -83,11 +89,26 @@ rm("testdata","testdata.activity","testdata.subject","traindata",
 ## measurement. 
 
 ## I am interpreting this to mean extract only those features containing
-## mean() and std() in their names (excluding the angle() features)
+## mean() and std() in their names (which specifically excludes the angle.*() 
+## features)
 
-filter <- alldata[c("subject","activity",grep(".mean[^F]|.std.",colnames(alldata),value=TRUE,perl=TRUE))]
-colnames(filter) <- gsub("\\.\\.","",colnames(filter))
+filterdata <- combineddata[c("subject","activity",
+                         grep(".mean[^F]|.std.",colnames(combineddata),value=TRUE,perl=TRUE))]
 
-rm("alldata")
+## Eliminate the extraneous ".." from column names - these came from
+## the parentheses in the input data.
 
+colnames(filterdata) <- gsub("\\.\\.","",colnames(filterdata))
+filterdata$subject <- as.factor(filterdata$subject)
+filterdata$activity <- as.factor(filterdata$activity)
 
+rm("combineddata","activities","features")
+
+message("Load complete.")
+
+transform <- melt(filterdata,id=c("subject","activity"))
+tidydata <- dcast(transform, subject + activity ~ variable, fun.aggregate = mean)
+colnames(tidydata) <- c("subject","activity",paste("mean.",names(tidydata)[3:68],sep=""))
+rm("transform")
+
+write.csv(tidydata,file="mean_observed_values.csv")
