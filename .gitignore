@@ -14,6 +14,7 @@
 # Data files
 activity.zip
 data/*
+*.txt
 
 # Markdown previews.
 *.html

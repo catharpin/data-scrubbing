@@ -14,13 +14,15 @@ data-scrubbing
 Usage
 -----
 
-This script will detect whether the file "activity.zip" is present in the 
+This script will detect whether the file `activity.zip` is present in the 
 current working directory.  If it isn't,
 it will retrieve the data file.
 
-If the /data subdirectory is present in the working directory, the script 
+If the `/data` subdirectory is present in the working directory, the script 
 will assume the raw file has been unpacked.
-Otherwise it will unpack the "activity.zip" file into /data.
+Otherwise it will unpack the `activity.zip` file into /data.
+
+Produces a file `mean_observed_values.txt` in the working directory as output.
 
 Assumptions
 -----------

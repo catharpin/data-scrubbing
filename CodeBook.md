@@ -10,8 +10,8 @@ signifying the test subject and the activity the subject was engaging in at
 the time of the measurement.
 
 There are thirty subjects in the study, numbered 1 through 30.  Each subject
-engaged in six activities, encoded as LAYING, SITTING, STANDING, WALKING,
-WALKING_DOWNSTAIRS, and WALKING_UPSTAIRS.
+engaged in six activities, encoded as `LAYING`, `SITTING`, `STANDING`, `WALKING`,
+`WALKING_DOWNSTAIRS`, and `WALKING_UPSTAIRS`.
 
 From these measurements, only those representing mean and standard deviations
 of the raw data were extracted.  This was determined by name of the measurement
@@ -29,7 +29,9 @@ connection to the original names, they are prefixed by "mean.".
 
 Outputs
 ---------------
-The `run_analysis.R` script cleans most of its intermediate results.  
+The `run_analysis.R` script cleans most of its intermediate results as they
+are significant in size.
+
 Retained items are:
 
 * `filterdata` - the subset of the merged data that contains only mean() and
@@ -37,8 +39,8 @@ Retained items are:
 * `tidydata` - the arithmetic means of each of the mean() and std() observations,
     summarized by subject and activity.
     
-The contents of `tidydata` are also written to `mean_observed_values.csv` in 
-the working directory.
+The contents of `tidydata` are also written to `mean_observed_values.txt` 
+(CSV format) in the working directory.
 
 
 References

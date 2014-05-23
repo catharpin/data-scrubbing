@@ -74,8 +74,6 @@ testdata$activity <- activities[testdata.activity$activity.code]
 testdata$subject <- testdata.subject$subject.code
 testdata$sourcefile <- 'TEST'
 
-
-
 ## Objective 1. Merge training and test data into a single dataset.
 
 combineddata <- merge(testdata,traindata,all=TRUE)
@@ -107,8 +105,16 @@ rm("combineddata","activities","features")
 message("Load complete.")
 
 transform <- melt(filterdata,id=c("subject","activity"))
+
+## Summarize the data by subject and activity.
+
 tidydata <- dcast(transform, subject + activity ~ variable, fun.aggregate = mean)
+
+## Prefix the measurements with 'mean.' to distinguish them from the originals
+## and convey the additional transformations without making them excessively 
+## long.
+
 colnames(tidydata) <- c("subject","activity",paste("mean.",names(tidydata)[3:68],sep=""))
 rm("transform")
 
-write.csv(tidydata,file="mean_observed_values.csv")
+write.csv(tidydata,file="mean_observed_values.txt")
