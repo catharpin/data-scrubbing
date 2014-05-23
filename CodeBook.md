@@ -100,7 +100,7 @@ position | name | datatype
 67 | mean.fBodyBodyGyroJerkMag.mean | numeric
 68 | mean.fBodyBodyGyroJerkMag.std | numeric
 
-Outputs
+Output and Retained Data
 ---------------
 The `run_analysis.R` script cleans most of its intermediate results as they
 are significant in size.
