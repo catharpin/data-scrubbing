@@ -1,5 +1,9 @@
 library(reshape2)
 
+## Prepare a folder for the unpacked data files.
+
+if(!file.exists("./data"){dir.create("./data")}
+
 ## Retrieve the dataset from cloudfront if it's not already present.
 
 if (!file.exists("./activity.zip")){
